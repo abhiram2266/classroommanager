@@ -15,7 +15,6 @@ export const ScheduleClassPage: React.FC = () => {
   const [scrollY, setScrollY] = useState(0);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  // Form state
   const [formData, setFormData] = useState({
     courseName: '',
     courseId: '',
@@ -27,7 +26,6 @@ export const ScheduleClassPage: React.FC = () => {
     notes: '',
   });
 
-  // Handle scroll
   useEffect(() => {
     const handleScroll = () => {
       setScrollY(window.scrollY);
@@ -36,7 +34,6 @@ export const ScheduleClassPage: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Starfield animation
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -92,17 +89,17 @@ export const ScheduleClassPage: React.FC = () => {
     };
   }, []);
 
-  // Fetch data
+  
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       setError(null);
       try {
-        // Fetch classrooms
+        
         const classroomData = await classroomService.getAll();
         setClassrooms(classroomData);
 
-        // Fetch faculty
+        
         const facultySnapshot = await getDocs(collection(db, 'faculty'));
         const facultyData = facultySnapshot.docs.map((doc) => ({
           id: doc.id,
@@ -110,7 +107,7 @@ export const ScheduleClassPage: React.FC = () => {
         } as Faculty));
         setFaculty(facultyData);
 
-        // Fetch today's schedules
+        
         const today = new Date();
         today.setHours(0, 0, 0, 0);
         const tomorrow = new Date(today);
@@ -139,7 +136,6 @@ export const ScheduleClassPage: React.FC = () => {
     fetchData();
   }, []);
 
-  // Check classroom status
   const getClassroomStatus = (classroomId: string) => {
     const schedules = todaySchedules.filter((s) => s.classroomId === classroomId);
     if (schedules.length === 0) return { status: 'available', message: 'No classes today' };
@@ -149,7 +145,6 @@ export const ScheduleClassPage: React.FC = () => {
     };
   };
 
-  // Check for time conflicts
   const checkTimeConflict = (classroomId: string, startTime: string, endTime: string) => {
     if (!classroomId) return null;
 
@@ -168,17 +163,14 @@ export const ScheduleClassPage: React.FC = () => {
       const existingStartMinutes = existingStartHour * 60 + existingStartMin;
       const existingEndMinutes = existingEndHour * 60 + existingEndMin;
 
-      // Check if times overlap
       return newStartMinutes < existingEndMinutes && newEndMinutes > existingStartMinutes;
     });
 
     return conflicts.length > 0 ? conflicts : null;
   };
 
-  // Get conflicting schedules for the current form
   const conflictingSchedules = checkTimeConflict(formData.classroomId, formData.startTime, formData.endTime);
 
-  // Handle form submit
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -187,7 +179,6 @@ export const ScheduleClassPage: React.FC = () => {
       return;
     }
 
-    // Check for time conflicts
     const conflicts = checkTimeConflict(formData.classroomId, formData.startTime, formData.endTime);
     if (conflicts && conflicts.length > 0) {
       setError(`Time conflict! This classroom is already booked for: ${conflicts.map((c) => c.courseName).join(', ')}`);
@@ -235,7 +226,6 @@ export const ScheduleClassPage: React.FC = () => {
         notes: '',
       });
 
-      // Refresh today's schedules
       const today2 = new Date();
       today2.setHours(0, 0, 0, 0);
       const tomorrow = new Date(today2);
@@ -263,21 +253,17 @@ export const ScheduleClassPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden">
-      {/* Starfield Canvas */}
       <canvas
         ref={canvasRef}
         className="fixed top-0 left-0 w-full h-full pointer-events-none z-0"
       />
 
-      {/* Content */}
       <div className="relative z-10 pt-24">
-        {/* Top right coordinates */}
         <div className="fixed top-24 right-6 md:right-12 text-right text-xs md:text-sm font-mono text-yellow-600 z-20">
           <div>CLASS SCHEDULER</div>
           <div>Create New Schedule</div>
         </div>
 
-        {/* Main Title Section */}
         <section className="px-6 py-12 border-b border-yellow-600/20">
           <div className="max-w-6xl mx-auto">
             <h1 className="text-5xl md:text-7xl font-black mb-4 tracking-tighter" style={{
@@ -294,10 +280,8 @@ export const ScheduleClassPage: React.FC = () => {
           </div>
         </section>
 
-        {/* Content Section */}
         <section className="px-6 py-16 md:py-24">
           <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Form Section */}
             <div className="lg:col-span-2">
               <div className="border border-yellow-600/30 rounded-lg p-8 bg-black/50 backdrop-blur-md">
                 <h2 className="text-2xl font-black text-yellow-600 mb-6 font-mono">NEW SCHEDULE</h2>
@@ -334,7 +318,6 @@ export const ScheduleClassPage: React.FC = () => {
                 )}
 
                 <form onSubmit={handleSubmit} className="space-y-5">
-                  {/* Course Name */}
                   <div>
                     <label className="block text-xs text-yellow-600 font-mono uppercase mb-2">Course Name *</label>
                     <input
@@ -347,7 +330,6 @@ export const ScheduleClassPage: React.FC = () => {
                     />
                   </div>
 
-                  {/* Course ID */}
                   <div>
                     <label className="block text-xs text-yellow-600 font-mono uppercase mb-2">Course ID</label>
                     <input
@@ -359,7 +341,6 @@ export const ScheduleClassPage: React.FC = () => {
                     />
                   </div>
 
-                  {/* Classroom Selector */}
                   <div>
                     <label className="block text-xs text-yellow-600 font-mono uppercase mb-2">Classroom *</label>
                     <select
@@ -377,7 +358,6 @@ export const ScheduleClassPage: React.FC = () => {
                     </select>
                   </div>
 
-                  {/* Faculty Selector */}
                   <div>
                     <label className="block text-xs text-yellow-600 font-mono uppercase mb-2">Faculty *</label>
                     <select
@@ -395,7 +375,6 @@ export const ScheduleClassPage: React.FC = () => {
                     </select>
                   </div>
 
-                  {/* Time Section */}
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs text-yellow-600 font-mono uppercase mb-2">Start Time *</label>
@@ -419,7 +398,6 @@ export const ScheduleClassPage: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Enrolled Students */}
                   <div>
                     <label className="block text-xs text-yellow-600 font-mono uppercase mb-2">Enrolled Students</label>
                     <input
@@ -432,7 +410,6 @@ export const ScheduleClassPage: React.FC = () => {
                     />
                   </div>
 
-                  {/* Notes */}
                   <div>
                     <label className="block text-xs text-yellow-600 font-mono uppercase mb-2">Notes</label>
                     <textarea
@@ -443,7 +420,6 @@ export const ScheduleClassPage: React.FC = () => {
                     />
                   </div>
 
-                  {/* Submit Button */}
                   <button
                     type="submit"
                     disabled={conflictingSchedules && conflictingSchedules.length > 0}
@@ -460,7 +436,6 @@ export const ScheduleClassPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Status Section */}
             <div className="lg:col-span-1">
               <div className="border border-yellow-600/30 rounded-lg p-6 bg-black/50 backdrop-blur-md sticky top-32">
                 <h3 className="text-lg font-black text-yellow-600 mb-4 font-mono">TODAY'S STATUS</h3>
@@ -497,7 +472,7 @@ export const ScheduleClassPage: React.FC = () => {
                   </div>
                 )}
 
-                {/* Today's Schedule */}
+                
                 <div className="mt-6 pt-6 border-t border-yellow-600/20">
                   <h4 className="text-sm font-bold text-yellow-600 mb-4 font-mono flex items-center gap-2">
                     <Clock className="w-4 h-4" />
@@ -523,7 +498,6 @@ export const ScheduleClassPage: React.FC = () => {
           </div>
         </section>
 
-        {/* Bottom status bar */}
         <div className="fixed bottom-8 left-8 text-xs font-mono text-yellow-600/60 z-20">
           <div>SYSTEM STATUS: ONLINE</div>
           <div>CLASSROOMS: {classrooms.length}</div>

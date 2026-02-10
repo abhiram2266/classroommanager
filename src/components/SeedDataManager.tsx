@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
 import { seedAllData, clearAllCollections, initializeCollections } from '@/services/seedData';
 
-/**
- * Component to manage database seeding
- * Only show in development or for admins
- */
+
 export const SeedDataManager: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string>('');
@@ -64,7 +61,7 @@ export const SeedDataManager: React.FC = () => {
     }
   };
 
-  // Only show in development
+  
   if (import.meta.env.MODE !== 'development') {
     return null;
   }

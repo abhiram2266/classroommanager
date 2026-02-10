@@ -5,7 +5,7 @@ export const HomePage: React.FC = () => {
   const [scrollY, setScrollY] = useState(0);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  // Handle scroll
+  
   useEffect(() => {
     const handleScroll = () => {
       setScrollY(window.scrollY);
@@ -14,7 +14,7 @@ export const HomePage: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Starfield animation
+  
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -25,7 +25,7 @@ export const HomePage: React.FC = () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    // Generate stars
+    
     const stars: Array<{ x: number; y: number; radius: number; opacity: number; twinkleSpeed: number }> = [];
     for (let i = 0; i < 200; i++) {
       stars.push({
@@ -45,7 +45,7 @@ export const HomePage: React.FC = () => {
       ctx.fillStyle = 'rgba(10, 10, 10, 0.1)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Draw twinkling stars
+      
       stars.forEach((star) => {
         const twinkle = Math.abs(Math.sin(time * star.twinkleSpeed)) * 0.5 + 0.5;
         ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity * twinkle})`;
@@ -74,53 +74,53 @@ export const HomePage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden">
-      {/* Starfield Canvas */}
+      
       <canvas
         ref={canvasRef}
         className="fixed top-0 left-0 w-full h-full pointer-events-none z-0"
       />
 
-      {/* Content */}
+      
       <div className="relative z-10">
-        {/* Hero Section */}
+        
         <section className="min-h-screen flex flex-col items-center justify-center px-6 relative overflow-hidden" style={{
           perspective: '1200px',
         }}>
-          {/* Geometric Circle Background with 3D Transform */}
+          
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 md:w-[500px] md:h-[500px] pointer-events-none opacity-40" style={{
             transform: `translateX(-50%) translateY(-50%) rotateX(${scrollY * 0.3}deg) rotateY(${scrollY * 0.5}deg) translateZ(0px)`,
             transition: 'transform 0.05s ease-out',
             transformStyle: 'preserve-3d',
           }}>
-            <svg viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg viewBox="0 0 500 500" fill="none" xmlns="http:
               <circle cx="250" cy="250" r="200" stroke="#d4af37" strokeWidth="2" />
               <circle cx="250" cy="250" r="220" stroke="#d4af37" strokeWidth="1" opacity="0.5" />
               <circle cx="250" cy="250" r="180" stroke="#d4af37" strokeWidth="1" opacity="0.3" />
               
-              {/* Curved lines like in the reference */}
+              
               <path d="M 250 50 Q 400 250 250 450" stroke="#d4af37" strokeWidth="2" opacity="0.4" />
               <path d="M 50 250 Q 250 400 450 250" stroke="#d4af37" strokeWidth="2" opacity="0.4" />
             </svg>
           </div>
 
-          {/* Top right coordinates */}
+          
           <div className="absolute top-20 right-6 md:right-12 text-right text-xs md:text-sm font-mono text-yellow-600">
             <div>COORDINATES</div>
             <div>25.2877° N, 82.9913° E</div>
           </div>
 
-          {/* Main Content */}
+          
           <div className="max-w-4xl mx-auto text-center relative z-20" style={{
             transform: `translateY(${scrollY * 0.3}px) perspective(1000px) rotateX(${Math.sin(scrollY * 0.01) * 2}deg)`,
             transition: 'transform 0.05s ease-out',
             transformStyle: 'preserve-3d',
           }}>
-            {/* Logo/Branding */}
+            
             <div className="mb-8 tracking-widest uppercase text-yellow-600 text-sm md:text-base font-mono">
               College Management System
             </div>
 
-            {/* Main Title */}
+            
             <h1 className="text-6xl md:text-8xl font-black mb-4 tracking-tighter" style={{
               textShadow: '0 0 30px rgba(212, 175, 55, 0.3), 0 0 60px rgba(212, 175, 55, 0.1)',
               letterSpacing: '-0.02em',
@@ -130,22 +130,22 @@ export const HomePage: React.FC = () => {
               <span className="text-yellow-600">MANAGEMENT</span>
             </h1>
 
-            {/* Subtitle */}
+            
             <div className="text-xl md:text-2xl text-yellow-600 font-light tracking-widest uppercase mb-8 font-mono">
               Smart. Efficient. Intelligent.
             </div>
 
-            {/* Date/Tagline */}
+            
             <div className="text-sm md:text-base text-white/60 font-mono uppercase tracking-widest mb-12">
               Institution Management System
             </div>
 
-            {/* Description */}
+            
             <p className="text-white/70 max-w-2xl mx-auto mb-12 leading-relaxed text-base md:text-lg">
               Asia's most advanced college scheduling platform. Streamline your institution with real-time conflict detection and intelligent resource management.
             </p>
 
-            {/* Info Cards */}
+            
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-16 max-w-3xl mx-auto">
               {[
                 { label: 'Location', value: 'Your Institute' },
@@ -168,7 +168,7 @@ export const HomePage: React.FC = () => {
               ))}
             </div>
 
-            {/* CTA Button */}
+            
             <Link
               to="/schedule"
               className="inline-block px-12 py-3 border-2 border-yellow-600 text-yellow-600 font-mono uppercase text-sm tracking-widest hover:bg-yellow-600 hover:text-black transition-all duration-300"
@@ -177,14 +177,14 @@ export const HomePage: React.FC = () => {
             </Link>
           </div>
 
-          {/* Bottom status bar */}
+          
           <div className="absolute bottom-8 left-8 text-xs font-mono text-yellow-600/60">
             <div>SYSTEM STATUS: ONLINE</div>
             <div>VERSION: 1.0.0</div>
           </div>
         </section>
 
-        {/* Features Section */}
+        
         <section className="min-h-screen py-32 px-6 border-t border-yellow-600/20" style={{
           perspective: '1000px',
         }}>
@@ -234,7 +234,7 @@ export const HomePage: React.FC = () => {
           </div>
         </section>
 
-        {/* Timeline Section */}
+        
         <section className="min-h-screen py-32 px-6 border-t border-yellow-600/20" style={{
           perspective: '1000px',
         }}>
@@ -275,7 +275,7 @@ export const HomePage: React.FC = () => {
           </div>
         </section>
 
-        {/* Footer */}
+        
         <footer className="border-t border-yellow-600/20 py-12 px-6">
           <div className="max-w-5xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">

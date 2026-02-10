@@ -1,4 +1,4 @@
-// User types
+
 export type UserRole = 'admin' | 'faculty' | 'student' | 'staff';
 
 export interface User {
@@ -11,7 +11,7 @@ export interface User {
   updatedAt: Date;
 }
 
-// Classroom types
+
 export interface Classroom {
   id: string;
   roomNumber: string;
@@ -23,7 +23,7 @@ export interface Classroom {
   updatedAt: Date;
 }
 
-// Course types
+
 export interface Course {
   id: string;
   code: string;
@@ -35,7 +35,7 @@ export interface Course {
   updatedAt: Date;
 }
 
-// Faculty types
+
 export type FacultyStatus = 'present' | 'absent' | 'leave' | 'unavailable';
 
 export interface Faculty {
@@ -51,14 +51,14 @@ export interface Faculty {
   updatedAt: Date;
 }
 
-// Time slot types
+
 export interface TimeSlot {
-  startTime: string; // HH:MM format
-  endTime: string;   // HH:MM format
-  dayOfWeek: number; // 0-6 (Sunday-Saturday)
+  startTime: string; 
+  endTime: string;   
+  dayOfWeek: number; 
 }
 
-// Schedule types
+
 export type ScheduleStatus = 'scheduled' | 'cancelled' | 'rescheduled' | 'completed';
 
 export interface Schedule {
@@ -75,7 +75,7 @@ export interface Schedule {
   updatedAt: Date;
 }
 
-// Event types
+
 export interface Event {
   id: string;
   title: string;
@@ -89,7 +89,7 @@ export interface Event {
   updatedAt: Date;
 }
 
-// Conflict types
+
 export interface ScheduleConflict {
   id: string;
   scheduleId: string;
@@ -99,7 +99,7 @@ export interface ScheduleConflict {
   createdAt: Date;
 }
 
-// Dashboard types
+
 export interface DashboardData {
   todaySchedules: Schedule[];
   upcomingSchedules: Schedule[];

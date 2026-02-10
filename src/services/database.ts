@@ -13,12 +13,12 @@ import {
 import { db } from './firebase';
 import type { Schedule, Classroom, Faculty } from '@/types';
 
-// Firestore collection references
+
 const CLASSROOMS_COLLECTION = 'classrooms';
 const SCHEDULES_COLLECTION = 'schedules';
 const FACULTY_COLLECTION = 'faculty';
 
-// Classroom operations
+
 export const classroomService = {
   async getAll(): Promise<Classroom[]> {
     try {
@@ -62,7 +62,7 @@ export const classroomService = {
   },
 };
 
-// Schedule operations
+
 export const scheduleService = {
   async getByClassroomAndDate(classroomId: string, date: Date): Promise<Schedule[]> {
     const startOfDay = new Date(date);
@@ -137,7 +137,7 @@ export const scheduleService = {
   },
 };
 
-// Faculty service
+
 export const facultyService = {
   async getAll(): Promise<Faculty[]> {
     const snapshot = await getDocs(collection(db, FACULTY_COLLECTION));

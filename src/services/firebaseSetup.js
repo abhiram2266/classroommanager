@@ -7,20 +7,20 @@ import {
   Timestamp
 } from "firebase/firestore";
 
-// Firebase configuration
+
 const firebaseConfig = {
   apiKey: "AIzaSyD7Jn5zZh4e3lq5vafMifnhVIKb2t7emTM",
   authDomain: "webp-e9b6a.firebaseapp.com",
   projectId: "webp-e9b6a"
 };
 
-// Initialize Firebase
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// ============================================
-// CREATE CLASSROOMS
-// ============================================
+
+
+
 async function createClassrooms() {
   const classrooms = [
     {
@@ -83,9 +83,9 @@ async function createClassrooms() {
   console.log("\n🎉 classrooms collection created successfully\n");
 }
 
-// ============================================
-// CREATE FACULTY
-// ============================================
+
+
+
 async function createFaculty() {
   const faculty = [
     {
@@ -133,9 +133,9 @@ async function createFaculty() {
   console.log("\n🎉 faculty collection created successfully\n");
 }
 
-// ============================================
-// CREATE SCHEDULES
-// ============================================
+
+
+
 async function createSchedules() {
   const schedules = [
     {
@@ -204,9 +204,9 @@ async function createSchedules() {
   console.log("\n🎉 schedules collection created successfully\n");
 }
 
-// ============================================
-// RUN ALL
-// ============================================
+
+
+
 async function run() {
   try {
     console.log("🚀 Starting Firebase setup...\n");

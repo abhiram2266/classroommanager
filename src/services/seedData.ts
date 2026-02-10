@@ -11,7 +11,7 @@ import {
 import { db } from './firebase';
 import type { Classroom, Faculty, Schedule } from '@/types';
 
-// Sample Classrooms Data
+
 const classroomsData: Omit<Classroom, 'id'>[] = [
   {
     name: 'Lecture Hall A',
@@ -59,7 +59,7 @@ const classroomsData: Omit<Classroom, 'id'>[] = [
   },
 ];
 
-// Sample Faculty Data
+
 const facultyData: Omit<Faculty, 'id'>[] = [
   {
     name: 'Dr. John Smith',
@@ -95,10 +95,10 @@ const facultyData: Omit<Faculty, 'id'>[] = [
   },
 ];
 
-// Sample Schedules Data
+
 const schedulesData = [
   {
-    classroomId: '', // Will be filled with actual IDs
+    classroomId: '', 
     facultyId: '',
     courseId: 'CS101',
     courseName: 'Introduction to Programming',
@@ -144,18 +144,15 @@ const schedulesData = [
   },
 ];
 
-/**
- * Initialize Firebase on first run
- * Automatically detects if database is empty and seeds data
- */
+
 export async function initializeFirebase(): Promise<boolean> {
   try {
     console.log('🔥 Checking Firebase initialization status...\n');
 
-    // Check if classrooms collection has real data (excluding init_doc)
+    
     const classroomsSnapshot = await getDocs(collection(db, 'classrooms'));
     
-    // Filter out any init_doc entries
+    
     const realDocs = classroomsSnapshot.docs.filter(
       (doc) => doc.id !== 'init_doc'
     );
@@ -175,10 +172,7 @@ export async function initializeFirebase(): Promise<boolean> {
   }
 }
 
-/**
- * Initialize Firestore collections
- * Creates empty collections if they don't exist
- */
+
 export async function initializeCollections(): Promise<void> {
   try {
     console.log('🔧 Initializing Firestore collections...\n');
@@ -215,7 +209,7 @@ export async function initializeCollections(): Promise<void> {
       try {
         const snapshot = await getDocs(collection(db, col.name));
 
-        // If collection is empty or has only init doc, it needs initialization
+        
         if (snapshot.empty) {
           console.log(`📝 Creating collection: '${col.name}'...`);
           const docRef = doc(db, col.name, col.docId);
@@ -236,10 +230,7 @@ export async function initializeCollections(): Promise<void> {
   }
 }
 
-/**
- * Clean up initialization documents
- * Removes the temporary init_doc from all collections
- */
+
 export async function cleanupInitDocs(): Promise<void> {
   try {
     console.log('🧹 Cleaning up initialization documents...\n');
@@ -265,9 +256,7 @@ export async function cleanupInitDocs(): Promise<void> {
   }
 }
 
-/**
- * Add sample classrooms to Firestore
- */
+
 export async function seedClassrooms(): Promise<string[]> {
   try {
     const classroomIds: string[] = [];
@@ -286,9 +275,7 @@ export async function seedClassrooms(): Promise<string[]> {
   }
 }
 
-/**
- * Add sample faculty to Firestore
- */
+
 export async function seedFaculty(): Promise<string[]> {
   try {
     const facultyIds: string[] = [];
@@ -307,9 +294,7 @@ export async function seedFaculty(): Promise<string[]> {
   }
 }
 
-/**
- * Add sample schedules to Firestore
- */
+
 export async function seedSchedules(
   classroomIds: string[],
   facultyIds: string[]
@@ -339,32 +324,30 @@ export async function seedSchedules(
   }
 }
 
-/**
- * Seed all collections at once
- */
+
 export async function seedAllData(): Promise<void> {
   try {
     console.log('🚀 Starting complete setup...\n');
 
-    // Step 1: Initialize collections
+    
     await initializeCollections();
 
-    // Step 2: Seed classrooms
+    
     console.log('📚 Seeding classrooms...');
     const classroomIds = await seedClassrooms();
     console.log(`✨ ${classroomIds.length} classrooms added\n`);
 
-    // Step 3: Seed faculty
+    
     console.log('👨‍🏫 Seeding faculty...');
     const facultyIds = await seedFaculty();
     console.log(`✨ ${facultyIds.length} faculty members added\n`);
 
-    // Step 4: Seed schedules
+    
     console.log('📅 Seeding schedules...');
     await seedSchedules(classroomIds, facultyIds);
     console.log(`✨ ${schedulesData.length} schedules added\n`);
 
-    // Step 5: Clean up init docs
+    
     await cleanupInitDocs();
 
     console.log('✅ All data seeded successfully!');
@@ -374,9 +357,7 @@ export async function seedAllData(): Promise<void> {
   }
 }
 
-/**
- * Clear all collections (be careful!)
- */
+
 export async function clearAllCollections(): Promise<void> {
   try {
     console.log('⚠️  Clearing all collections...');

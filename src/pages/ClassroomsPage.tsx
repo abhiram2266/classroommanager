@@ -10,7 +10,7 @@ export const ClassroomsPage: React.FC = () => {
   const [scrollY, setScrollY] = useState(0);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  // Handle scroll
+  
   useEffect(() => {
     const handleScroll = () => {
       setScrollY(window.scrollY);
@@ -19,7 +19,7 @@ export const ClassroomsPage: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Starfield animation
+  
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -30,7 +30,7 @@ export const ClassroomsPage: React.FC = () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    // Generate stars
+    
     const stars: Array<{ x: number; y: number; radius: number; opacity: number; twinkleSpeed: number }> = [];
     for (let i = 0; i < 200; i++) {
       stars.push({
@@ -50,7 +50,7 @@ export const ClassroomsPage: React.FC = () => {
       ctx.fillStyle = 'rgba(10, 10, 10, 0.1)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Draw twinkling stars
+      
       stars.forEach((star) => {
         const twinkle = Math.abs(Math.sin(time * star.twinkleSpeed)) * 0.5 + 0.5;
         ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity * twinkle})`;
@@ -77,7 +77,7 @@ export const ClassroomsPage: React.FC = () => {
     };
   }, []);
 
-  // Fetch classrooms
+  
   useEffect(() => {
     const fetchClassrooms = async () => {
       setLoading(true);
@@ -98,21 +98,21 @@ export const ClassroomsPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden">
-      {/* Starfield Canvas */}
+      
       <canvas
         ref={canvasRef}
         className="fixed top-0 left-0 w-full h-full pointer-events-none z-0"
       />
 
-      {/* Content */}
+      
       <div className="relative z-10 pt-24">
-        {/* Top right coordinates */}
+        
         <div className="fixed top-24 right-6 md:right-12 text-right text-xs md:text-sm font-mono text-yellow-600 z-20">
           <div>CLASSROOM VIEW</div>
           <div>Total: {classrooms.length}</div>
         </div>
 
-        {/* Main Title Section */}
+        
         <section className="px-6 py-12 border-b border-yellow-600/20">
           <div className="max-w-6xl mx-auto">
             <h1 className="text-5xl md:text-7xl font-black mb-4 tracking-tighter" style={{
@@ -129,7 +129,7 @@ export const ClassroomsPage: React.FC = () => {
           </div>
         </section>
 
-        {/* Classrooms Grid */}
+        
         <section className="px-6 py-16 md:py-24">
           <div className="max-w-6xl mx-auto">
             {error && (
@@ -159,7 +159,7 @@ export const ClassroomsPage: React.FC = () => {
                     className="border border-yellow-600/30 rounded-lg p-6 bg-black/50 hover:border-yellow-600/60 hover:bg-yellow-600/5 transition-all duration-300 fade-in-up backdrop-blur-md"
                     style={{ animationDelay: `${idx * 0.1}s` }}
                   >
-                    {/* Header */}
+                    
                     <div className="mb-6">
                       <h3 className="text-xl font-black text-yellow-600 mb-2 font-mono tracking-tight">
                         {classroom.name}
@@ -170,9 +170,9 @@ export const ClassroomsPage: React.FC = () => {
                       </div>
                     </div>
 
-                    {/* Features */}
+                    
                     <div className="space-y-4">
-                      {/* Capacity */}
+                      
                       <div className="flex items-center gap-3 p-3 bg-yellow-600/5 border border-yellow-600/20 rounded-md">
                         <Users className="w-4 h-4 text-yellow-600" />
                         <div className="flex-1">
@@ -181,7 +181,7 @@ export const ClassroomsPage: React.FC = () => {
                         </div>
                       </div>
 
-                      {/* Floor/Building */}
+                      
                       <div className="flex items-center gap-3 p-3 bg-yellow-600/5 border border-yellow-600/20 rounded-md">
                         <MapPin className="w-4 h-4 text-yellow-600" />
                         <div className="flex-1">
@@ -190,7 +190,7 @@ export const ClassroomsPage: React.FC = () => {
                         </div>
                       </div>
 
-                      {/* Amenities */}
+                      
                       {classroom.amenities.length > 0 && (
                         <div className="border-t border-yellow-600/20 pt-4">
                           <p className="text-xs text-white/60 font-mono uppercase mb-3 flex items-center gap-2">
@@ -210,7 +210,7 @@ export const ClassroomsPage: React.FC = () => {
                         </div>
                       )}
 
-                      {/* Status */}
+                      
                       <div className="pt-4 border-t border-yellow-600/20">
                         {classroom.isActive ? (
                           <span className="text-xs px-3 py-1.5 bg-green-500/20 text-green-400 border border-green-500/30 rounded font-mono font-bold uppercase">
@@ -230,7 +230,7 @@ export const ClassroomsPage: React.FC = () => {
           </div>
         </section>
 
-        {/* Bottom status bar */}
+        
         <div className="fixed bottom-8 left-8 text-xs font-mono text-yellow-600/60 z-20">
           <div>SYSTEM STATUS: ONLINE</div>
           <div>MODE: CLASSROOM VIEW</div>

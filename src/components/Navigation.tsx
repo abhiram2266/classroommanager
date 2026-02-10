@@ -11,7 +11,7 @@ export const Navigation: React.FC = () => {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-black/95 backdrop-blur-md border-b border-yellow-600/30" style={{ fontFamily: "'Audiowide', sans-serif" }}>
       <div className="max-w-7xl mx-auto px-6 md:px-12 py-3 flex items-center justify-between">
-        {/* Logo/Branding */}
+        
         <Link 
           to="/" 
           className="text-white text-lg md:text-xl font-bold uppercase hover:text-yellow-600 transition-colors"
@@ -20,7 +20,7 @@ export const Navigation: React.FC = () => {
           SCHEDULE '<span className="text-yellow-600">HUB</span>
         </Link>
 
-        {/* Desktop Menu */}
+        
         <div className="hidden md:flex items-center gap-6">
           <Link
             to="/"
@@ -59,7 +59,7 @@ export const Navigation: React.FC = () => {
           </Link>
         </div>
 
-        {/* Right Side Buttons */}
+        
         <div className="hidden md:flex items-center gap-4">
           <button className="uppercase text-xs tracking-wider text-gray-400 hover:text-yellow-600 transition-colors" style={{ fontFamily: "'Audiowide', sans-serif", letterSpacing: '0.08em' }}>
             Login
@@ -69,7 +69,7 @@ export const Navigation: React.FC = () => {
           </button>
         </div>
 
-        {/* Mobile Menu Button */}
+        
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="md:hidden text-yellow-600 hover:text-yellow-500 transition-colors"
@@ -78,7 +78,7 @@ export const Navigation: React.FC = () => {
         </button>
       </div>
 
-      {/* Mobile Menu */}
+      
       {isOpen && (
         <div className="md:hidden bg-black/95 border-t border-yellow-600/30">
           <div className="max-w-7xl mx-auto px-6 py-4 space-y-3" style={{ fontFamily: "'Audiowide', sans-serif" }}>
