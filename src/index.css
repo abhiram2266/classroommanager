@@ -5,6 +5,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Override Tailwind's default blue ring color globally */
+*, *::before, *::after {
+  --tw-ring-color: rgba(212, 175, 55, 0.5) !important;
+}
+
 body {
   margin: 0;
   font-family: 'Space Grotesk', 'Courier New', monospace;
@@ -13,6 +18,7 @@ body {
   background: #0a0a0a;
   min-height: 100vh;
   color: #ffffff;
+  -webkit-tap-highlight-color: transparent;
 }
 
 code {

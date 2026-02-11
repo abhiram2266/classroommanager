@@ -30,6 +30,9 @@ export default {
       fontFamily: {
         sans: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
       },
+      ringColor: {
+        DEFAULT: '#d4af37',
+      },
       keyframes: {
         'float': {
           '0%, 100%': { transform: 'translateY(0px)' },
