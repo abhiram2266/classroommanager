@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { AlertCircle, Clock, Building2, Plus } from 'lucide-react';
+import { AlertCircle, Clock, Plus } from 'lucide-react';
 import type { Classroom, Faculty, Schedule } from '@/types';
 import { classroomService } from '@/services/database';
 import { collection, addDoc, query, where, getDocs, Timestamp } from 'firebase/firestore';
@@ -12,7 +12,6 @@ export const ScheduleClassPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [scrollY, setScrollY] = useState(0);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   const [formData, setFormData] = useState({
@@ -25,14 +24,6 @@ export const ScheduleClassPage: React.FC = () => {
     enrolledStudents: 0,
     notes: '',
   });
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -157,8 +148,8 @@ export const ScheduleClassPage: React.FC = () => {
     const conflicts = todaySchedules.filter((schedule) => {
       if (schedule.classroomId !== classroomId) return false;
 
-      const [existingStartHour, existingStartMin] = schedule.startTime.split(':').map(Number);
-      const [existingEndHour, existingEndMin] = schedule.endTime.split(':').map(Number);
+      const [existingStartHour, existingStartMin] = schedule.timeSlot.startTime.split(':').map(Number);
+      const [existingEndHour, existingEndMin] = schedule.timeSlot.endTime.split(':').map(Number);
 
       const existingStartMinutes = existingStartHour * 60 + existingStartMin;
       const existingEndMinutes = existingEndHour * 60 + existingEndMin;
@@ -181,7 +172,7 @@ export const ScheduleClassPage: React.FC = () => {
 
     const conflicts = checkTimeConflict(formData.classroomId, formData.startTime, formData.endTime);
     if (conflicts && conflicts.length > 0) {
-      setError(`Time conflict! This classroom is already booked for: ${conflicts.map((c) => c.courseName).join(', ')}`);
+      setError(`Time conflict! This classroom is already booked for: ${conflicts.length} schedule(s)`);
       return;
     }
 
@@ -308,8 +299,8 @@ export const ScheduleClassPage: React.FC = () => {
                     <div className="space-y-2 ml-6">
                       {conflictingSchedules.map((conflict) => (
                         <div key={conflict.id} className="text-orange-200 text-xs bg-orange-500/10 p-2 rounded border border-orange-500/30">
-                          <p className="font-bold">{conflict.courseName}</p>
-                          <p className="text-orange-300">{conflict.startTime} - {conflict.endTime}</p>
+                          <p className="font-bold">Schedule {conflict.id.slice(0, 8)}</p>
+                          <p className="text-orange-300">{conflict.timeSlot.startTime} - {conflict.timeSlot.endTime}</p>
                         </div>
                       ))}
                     </div>
@@ -352,7 +343,7 @@ export const ScheduleClassPage: React.FC = () => {
                       <option value="">Select a classroom</option>
                       {classrooms.map((room) => (
                         <option key={room.id} value={room.id}>
-                          {room.name} (Capacity: {room.capacity})
+                          {room.roomNumber} (Capacity: {room.capacity})
                         </option>
                       ))}
                     </select>
@@ -422,7 +413,7 @@ export const ScheduleClassPage: React.FC = () => {
 
                   <button
                     type="submit"
-                    disabled={conflictingSchedules && conflictingSchedules.length > 0}
+                    disabled={conflictingSchedules ? conflictingSchedules.length > 0 : false}
                     className={`w-full px-6 py-3 font-mono font-bold uppercase tracking-widest rounded-lg transition-all duration-300 active:scale-95 flex items-center justify-center gap-2 ${
                       conflictingSchedules && conflictingSchedules.length > 0
                         ? 'bg-gray-600 text-gray-400 cursor-not-allowed opacity-50'
@@ -455,7 +446,7 @@ export const ScheduleClassPage: React.FC = () => {
                           key={classroom.id}
                           className="p-4 bg-yellow-600/10 border border-yellow-600/30 rounded-lg"
                         >
-                          <p className="text-sm font-bold text-white mb-1">{classroom.name}</p>
+                          <p className="text-sm font-bold text-white mb-1">{classroom.roomNumber}</p>
                           <div className="flex items-center gap-2">
                             <div
                               className={`w-3 h-3 rounded-full ${
@@ -484,9 +475,9 @@ export const ScheduleClassPage: React.FC = () => {
                     <div className="space-y-3">
                       {todaySchedules.map((schedule) => (
                         <div key={schedule.id} className="text-xs bg-yellow-600/5 p-3 rounded border border-yellow-600/20">
-                          <p className="font-bold text-white mb-1">{schedule.courseName}</p>
+                          <p className="font-bold text-white mb-1">Schedule {schedule.id.slice(0, 8)}</p>
                           <p className="text-white/60">
-                            {schedule.startTime} - {schedule.endTime}
+                            {schedule.timeSlot.startTime} - {schedule.timeSlot.endTime}
                           </p>
                         </div>
                       ))}

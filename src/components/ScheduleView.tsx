@@ -56,10 +56,10 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({ selectedClassroom, s
         textShadow: '0 0 20px rgba(212, 175, 55, 0.1)',
       }}>
         <h2 className="text-3xl font-bold text-yellow-600 mb-2 font-black tracking-tight">
-          {selectedClassroom.name}
+          {selectedClassroom.roomNumber}
         </h2>
         <p className="text-white/60 font-mono text-sm mb-4">
-          {selectedClassroom.location}
+          {selectedClassroom.building}
         </p>
         <div className="text-white/70 text-lg mb-4">
           {selectedDate.toLocaleDateString('en-US', {
@@ -112,15 +112,14 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({ selectedClassroom, s
                   <div className="flex items-center gap-2.5 mb-3">
                     <BookOpen className="w-4 h-4 text-yellow-600" />
                     <h3 className="font-semibold text-white text-lg">
-                      {schedule.courseName}
+                      Schedule {schedule.id.slice(0, 8)}
                     </h3>
                   </div>
                   <p className="text-sm text-white/70 mb-2">
                     <span className="inline-block px-3 py-1.5 bg-yellow-600/15 text-yellow-600 rounded text-xs mr-3 border border-yellow-600/20 font-mono">
-                      🕐 {schedule.startTime} - {schedule.endTime}
+                      🕐 {schedule.timeSlot.startTime} - {schedule.timeSlot.endTime}
                     </span>
                   </p>
-                  <p className="text-xs text-white/40">👥 Enrolled: {schedule.enrolledStudents} students</p>
                 </div>
                 <span
                   className={`px-4 py-1.5 rounded text-xs font-mono font-bold whitespace-nowrap ml-3 border backdrop-blur-sm tracking-widest uppercase ${

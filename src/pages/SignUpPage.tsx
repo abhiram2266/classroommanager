@@ -39,8 +39,38 @@ export const SignUpPage: React.FC = () => {
   };
 
   const handleError = (err: unknown) => {
-    const msg = err instanceof Error ? err.message : 'Failed';\n    if (msg.includes('email-already-in-use')) setError('Email already registered. Login instead.');\n    else if (msg.includes('invalid-email')) setError('Invalid email');\n    else if (msg.includes('weak-password')) setError('Password too weak');\n    else if (msg.includes('popup-blocked')) setError('Pop-up blocked. Enable pop-ups.');\n    else if (msg.includes('popup-closed')) setError('Sign up cancelled');\n    else setError(msg);\n  };\n\n  const handleSubmit = async (e: React.FormEvent) => {\n    e.preventDefault();\n    setError(null);\n    if (!validate()) return;\n    setLoading(true);\n    try {\n      await signUp(email, password, displayName);\n      navigate('/');\n    } catch (err) {\n      handleError(err);\n    } finally {\n      setLoading(false);\n    }\n  };\n\n  const handleGoogleSignIn = async () => {\n    setError(null);\n    setLoading(true);\n    try {\n      await signInWithGoogle();\n      navigate('/');\n    } catch (err) {\n      handleError(err);\n    } finally {\n      setLoading(false);\n    }\n  };
-      }
+    const msg = err instanceof Error ? err.message : 'Failed';
+    if (msg.includes('email-already-in-use')) setError('Email already registered. Login instead.');
+    else if (msg.includes('invalid-email')) setError('Invalid email');
+    else if (msg.includes('weak-password')) setError('Password too weak');
+    else if (msg.includes('popup-blocked')) setError('Pop-up blocked. Enable pop-ups.');
+    else if (msg.includes('popup-closed')) setError('Sign up cancelled');
+    else setError(msg);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    if (!validate()) return;
+    setLoading(true);
+    try {
+      await signUp(email, password, displayName);
+      navigate('/');
+    } catch (err) {
+      handleError(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    setError(null);
+    setLoading(true);
+    try {
+      await signInWithGoogle();
+      navigate('/');
+    } catch (err) {
+      handleError(err);
     } finally {
       setLoading(false);
     }

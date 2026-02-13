@@ -35,8 +35,6 @@ export const NoticeBoard: React.FC<NoticeBoardProps> = ({ notices, onDelete }) =
     return <p className="text-gray-400">No notices yet</p>;
   }
 
-  const style = priorityStyles[notices[0]?.priority || 'low'];
-
   return (
     <div className="space-y-4">
       {error && (

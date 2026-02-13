@@ -7,17 +7,7 @@ export const ClassroomsPage: React.FC = () => {
   const [classrooms, setClassrooms] = useState<Classroom[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [scrollY, setScrollY] = useState(0);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-
-  
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   
   useEffect(() => {
@@ -162,11 +152,11 @@ export const ClassroomsPage: React.FC = () => {
                     
                     <div className="mb-6">
                       <h3 className="text-xl font-black text-yellow-600 mb-2 font-mono tracking-tight">
-                        {classroom.name}
+                        {classroom.roomNumber}
                       </h3>
                       <div className="flex items-center gap-2 text-yellow-600/70 font-mono text-xs">
                         <MapPin className="w-3 h-3" />
-                        <span>{classroom.location}</span>
+                        <span>{classroom.building}</span>
                       </div>
                     </div>
 
@@ -186,7 +176,7 @@ export const ClassroomsPage: React.FC = () => {
                         <MapPin className="w-4 h-4 text-yellow-600" />
                         <div className="flex-1">
                           <p className="text-xs text-white/60 font-mono uppercase">Location</p>
-                          <p className="text-sm font-bold text-white">{classroom.building} • Floor {classroom.floor}</p>
+                          <p className="text-sm font-bold text-white">{classroom.building}</p>
                         </div>
                       </div>
 

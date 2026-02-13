@@ -7,17 +7,7 @@ import { ScheduleView } from '@/components/ScheduleView';
 export const SchedulePage: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedClassroom, setSelectedClassroom] = useState<Classroom | null>(null);
-  const [scrollY, setScrollY] = useState(0);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-
-  
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   
   useEffect(() => {

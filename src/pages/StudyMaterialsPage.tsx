@@ -147,7 +147,6 @@ export const StudyMaterialsPage: React.FC = () => {
           <StudyMaterialList
             materials={filteredMaterials}
             isLoading={isLoading}
-            selectedCategory={selectedCategory === 'all' ? undefined : selectedCategory}
             onMaterialDeleted={loadMaterials}
           />
         </div>

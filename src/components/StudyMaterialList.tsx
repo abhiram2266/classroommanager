@@ -5,14 +5,12 @@ import { StudyMaterial, deleteStudyMaterial, formatFileSize, getCategoryEmoji } 
 interface StudyMaterialListProps {
   materials: StudyMaterial[];
   isLoading: boolean;
-  selectedCategory?: string;
   onMaterialDeleted: () => void;
 }
 
 export const StudyMaterialList: React.FC<StudyMaterialListProps> = ({
   materials,
   isLoading,
-  selectedCategory,
   onMaterialDeleted,
 }) => {
   const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -128,7 +126,5 @@ export const StudyMaterialList: React.FC<StudyMaterialListProps> = ({
         {materials.length} materials
       </p>
     </div>
-  );
-};
   );
 };

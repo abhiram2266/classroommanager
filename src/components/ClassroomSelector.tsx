@@ -39,7 +39,7 @@ export const ClassroomSelector: React.FC<ClassroomSelectorProps> = ({
   }, []);
 
   const filteredClassrooms = classrooms.filter((room) =>
-    room.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    room.roomNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
     room.building.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -90,10 +90,10 @@ export const ClassroomSelector: React.FC<ClassroomSelectorProps> = ({
               <div className="flex items-start justify-between">
                 <div>
                   <p className="font-semibold text-white leading-tight">
-                    {classroom.name}
+                    {classroom.roomNumber}
                   </p>
                   <p className="text-xs text-white/60 mt-1.5">
-                    {classroom.location} • Capacity: {classroom.capacity}
+                    {classroom.building} • Capacity: {classroom.capacity}
                   </p>
                 </div>
                 {selectedClassroom?.id === classroom.id && (

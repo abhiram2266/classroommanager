@@ -9,140 +9,94 @@ import {
   deleteDoc,
 } from 'firebase/firestore';
 import { db } from './firebase';
-import type { Classroom, Faculty, Schedule } from '@/types';
+import type { Classroom, Faculty } from '@/types';
 
 
 const classroomsData: Omit<Classroom, 'id'>[] = [
   {
-    name: 'Lecture Hall A',
+    roomNumber: 'A101',
     capacity: 100,
-    location: 'Block A, 1st Floor',
-    floor: 1,
     building: 'Block A',
     amenities: ['Projector', 'WiFi', 'AC', 'Whiteboard'],
     isActive: true,
-    createdAt: Timestamp.now(),
-    updatedAt: Timestamp.now(),
+    createdAt: new Date(),
+    updatedAt: new Date(),
   },
   {
-    name: 'Conference Room B',
+    roomNumber: 'B201',
     capacity: 50,
-    location: 'Block B, 2nd Floor',
-    floor: 2,
     building: 'Block B',
     amenities: ['Projector', 'WiFi', 'Round Table'],
     isActive: true,
-    createdAt: Timestamp.now(),
-    updatedAt: Timestamp.now(),
+    createdAt: new Date(),
+    updatedAt: new Date(),
   },
   {
-    name: 'Lab C',
+    roomNumber: 'C301',
     capacity: 40,
-    location: 'Block C, 3rd Floor',
-    floor: 3,
     building: 'Block C',
     amenities: ['Computers', 'WiFi', 'AC'],
     isActive: true,
-    createdAt: Timestamp.now(),
-    updatedAt: Timestamp.now(),
+    createdAt: new Date(),
+    updatedAt: new Date(),
   },
   {
-    name: 'Seminar Room D',
+    roomNumber: 'A102',
     capacity: 30,
-    location: 'Block A, Ground Floor',
-    floor: 0,
     building: 'Block A',
     amenities: ['WiFi', 'Whiteboard', 'Projector'],
     isActive: true,
-    createdAt: Timestamp.now(),
-    updatedAt: Timestamp.now(),
+    createdAt: new Date(),
+    updatedAt: new Date(),
   },
 ];
 
 
 const facultyData: Omit<Faculty, 'id'>[] = [
   {
+    userId: 'user-john-smith',
     name: 'Dr. John Smith',
     email: 'john.smith@college.edu',
     department: 'Computer Science',
-    availability: 'available',
-    createdAt: Timestamp.now(),
-    updatedAt: Timestamp.now(),
+    specialization: ['Programming', 'AI'],
+    status: 'present',
+    createdAt: new Date(),
+    updatedAt: new Date(),
   },
   {
+    userId: 'user-sarah-johnson',
     name: 'Prof. Sarah Johnson',
     email: 'sarah.johnson@college.edu',
     department: 'Mathematics',
-    availability: 'available',
-    createdAt: Timestamp.now(),
-    updatedAt: Timestamp.now(),
+    specialization: ['Algebra', 'Calculus'],
+    status: 'present',
+    createdAt: new Date(),
+    updatedAt: new Date(),
   },
   {
+    userId: 'user-michael-brown',
     name: 'Dr. Michael Brown',
     email: 'michael.brown@college.edu',
     department: 'Physics',
-    availability: 'on-leave',
-    createdAt: Timestamp.now(),
-    updatedAt: Timestamp.now(),
+    specialization: ['Quantum Physics', 'Mechanics'],
+    status: 'leave',
+    createdAt: new Date(),
+    updatedAt: new Date(),
   },
   {
+    userId: 'user-emily-davis',
     name: 'Prof. Emily Davis',
     email: 'emily.davis@college.edu',
     department: 'Computer Science',
-    availability: 'available',
-    createdAt: Timestamp.now(),
-    updatedAt: Timestamp.now(),
+    specialization: ['Web Development', 'Databases'],
+    status: 'present',
+    createdAt: new Date(),
+    updatedAt: new Date(),
   },
 ];
 
+const schedulesData: never[] = [];
 
-const schedulesData = [
-  {
-    classroomId: '', 
-    facultyId: '',
-    courseId: 'CS101',
-    courseName: 'Introduction to Programming',
-    date: Timestamp.fromDate(new Date(2026, 1, 15)),
-    startTime: '10:00',
-    endTime: '11:30',
-    duration: 90,
-    status: 'scheduled',
-    enrolledStudents: 45,
-    notes: 'Bring laptops for practical session',
-    createdAt: Timestamp.now(),
-    updatedAt: Timestamp.now(),
-  },
-  {
-    classroomId: '',
-    facultyId: '',
-    courseId: 'MATH201',
-    courseName: 'Advanced Calculus',
-    date: Timestamp.fromDate(new Date(2026, 1, 16)),
-    startTime: '14:00',
-    endTime: '15:30',
-    duration: 90,
-    status: 'scheduled',
-    enrolledStudents: 35,
-    notes: 'Chapter 5-7 will be covered',
-    createdAt: Timestamp.now(),
-    updatedAt: Timestamp.now(),
-  },
-  {
-    classroomId: '',
-    facultyId: '',
-    courseId: 'PHYS301',
-    courseName: 'Quantum Mechanics',
-    date: Timestamp.fromDate(new Date(2026, 1, 17)),
-    startTime: '09:00',
-    endTime: '10:30',
-    duration: 90,
-    status: 'scheduled',
-    enrolledStudents: 28,
-    notes: 'Lab session scheduled for next week',
-    createdAt: Timestamp.now(),
-    updatedAt: Timestamp.now(),
-  },
-];
 
 
 export async function initializeFirebase(): Promise<boolean> {
@@ -265,7 +219,7 @@ export async function seedClassrooms(): Promise<string[]> {
     for (const classroom of classroomsData) {
       const docRef = await addDoc(classroomsRef, classroom);
       classroomIds.push(docRef.id);
-      console.log(`✅ Classroom added: ${classroom.name} (${docRef.id})`);
+      console.log(`✅ Classroom added: ${classroom.roomNumber} (${docRef.id})`);
     }
 
     return classroomIds;
@@ -296,28 +250,11 @@ export async function seedFaculty(): Promise<string[]> {
 
 
 export async function seedSchedules(
-  classroomIds: string[],
-  facultyIds: string[]
+  _classroomIds: string[],
+  _facultyIds: string[]
 ): Promise<void> {
   try {
-    const schedulesRef = collection(db, 'schedules');
-    let classroomIndex = 0;
-    let facultyIndex = 0;
-
-    for (const schedule of schedulesData) {
-      const docRef = await addDoc(schedulesRef, {
-        ...schedule,
-        classroomId: classroomIds[classroomIndex % classroomIds.length],
-        facultyId: facultyIds[facultyIndex % facultyIds.length],
-      });
-
-      console.log(
-        `✅ Schedule added: ${schedule.courseName} (${docRef.id})`
-      );
-
-      classroomIndex++;
-      facultyIndex++;
-    }
+    // Schedules seeding disabled - schedules are created through UI
   } catch (error) {
     console.error('❌ Error seeding schedules:', error);
     throw error;
