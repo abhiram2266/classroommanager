@@ -6,6 +6,8 @@ import {
   onAuthStateChanged,
   User,
   updateProfile,
+  signInWithPopup,
+  GoogleAuthProvider,
 } from 'firebase/auth';
 
 export interface AuthUser {
@@ -43,6 +45,23 @@ export async function signUp(
 export async function logIn(email: string, password: string): Promise<AuthUser> {
   try {
     const result = await signInWithEmailAndPassword(auth, email, password);
+    const user = result.user;
+
+    return {
+      uid: user.uid,
+      email: user.email,
+      displayName: user.displayName,
+      photoURL: user.photoURL,
+    };
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function signInWithGoogle(): Promise<AuthUser> {
+  try {
+    const googleProvider = new GoogleAuthProvider();
+    const result = await signInWithPopup(auth, googleProvider);
     const user = result.user;
 
     return {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { UserPlus, AlertCircle, Loader, Eye, EyeOff, CheckCircle } from 'lucide-react';
-import { signUp } from '@/services/auth';
+import { UserPlus, AlertCircle, Loader, Eye, EyeOff, CheckCircle, Chrome } from 'lucide-react';
+import { signUp, signInWithGoogle } from '@/services/auth';
 
 export const SignUpPage: React.FC = () => {
   const navigate = useNavigate();
@@ -65,6 +65,27 @@ export const SignUpPage: React.FC = () => {
         setError('Invalid email address');
       } else if (errorMessage.includes('weak-password')) {
         setError('Password is too weak. Use a stronger password.');
+      } else {
+        setError(errorMessage);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    setError(null);
+    setLoading(true);
+
+    try {
+      await signInWithGoogle();
+      navigate('/');
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Google sign up failed';
+      if (errorMessage.includes('popup-blocked')) {
+        setError('Pop-up was blocked. Please enable pop-ups and try again.');
+      } else if (errorMessage.includes('popup-closed')) {
+        setError('Sign up was cancelled');
       } else {
         setError(errorMessage);
       }
@@ -212,6 +233,30 @@ export const SignUpPage: React.FC = () => {
           <div className="my-6 flex items-center gap-3">
             <div className="flex-1 border-t border-gray-600"></div>
             <p className="text-xs text-gray-400">OR</p>
+            <div className="flex-1 border-t border-gray-600"></div>
+          </div>
+
+          {/* Google Sign In Button */}
+          <button
+            onClick={handleGoogleSignIn}
+            disabled={loading}
+            className="w-full px-4 py-3 border border-gray-600 hover:border-yellow-600 text-white font-semibold rounded transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+          >
+            {loading ? (
+              <>
+                <Loader className="w-5 h-5 animate-spin" />
+                Signing up...
+              </>
+            ) : (
+              <>
+                <Chrome className="w-5 h-5" />
+                Sign up with Google
+              </>
+            )}
+          </button>
+
+          {/* Divider */}
+          <div className="my-6 flex items-center gap-3">
             <div className="flex-1 border-t border-gray-600"></div>
           </div>
 

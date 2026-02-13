@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { LogIn, AlertCircle, Loader, Eye, EyeOff } from 'lucide-react';
-import { logIn } from '@/services/auth';
+import { LogIn, AlertCircle, Loader, Eye, EyeOff, Chrome } from 'lucide-react';
+import { logIn, signInWithGoogle } from '@/services/auth';
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
@@ -38,6 +38,27 @@ export const LoginPage: React.FC = () => {
         setError('Incorrect password');
       } else if (errorMessage.includes('invalid-email')) {
         setError('Invalid email address');
+      } else {
+        setError(errorMessage);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    setError(null);
+    setLoading(true);
+
+    try {
+      await signInWithGoogle();
+      navigate('/');
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Google sign in failed';
+      if (errorMessage.includes('popup-blocked')) {
+        setError('Pop-up was blocked. Please enable pop-ups and try again.');
+      } else if (errorMessage.includes('popup-closed')) {
+        setError('Sign in was cancelled');
       } else {
         setError(errorMessage);
       }
@@ -129,6 +150,30 @@ export const LoginPage: React.FC = () => {
           <div className="my-6 flex items-center gap-3">
             <div className="flex-1 border-t border-gray-600"></div>
             <p className="text-xs text-gray-400">OR</p>
+            <div className="flex-1 border-t border-gray-600"></div>
+          </div>
+
+          {/* Google Sign In Button */}
+          <button
+            onClick={handleGoogleSignIn}
+            disabled={loading}
+            className="w-full px-4 py-3 border border-gray-600 hover:border-yellow-600 text-white font-semibold rounded transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+          >
+            {loading ? (
+              <>
+                <Loader className="w-5 h-5 animate-spin" />
+                Signing in...
+              </>
+            ) : (
+              <>
+                <Chrome className="w-5 h-5" />
+                Sign in with Google
+              </>
+            )}
+          </button>
+
+          {/* Divider */}
+          <div className="my-6 flex items-center gap-3">
             <div className="flex-1 border-t border-gray-600"></div>
           </div>
 
