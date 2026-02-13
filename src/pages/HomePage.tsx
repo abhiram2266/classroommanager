@@ -15,27 +15,21 @@ export const HomePage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden">
-      {/* Three.js Background */}
       <ThreeBackground scrollY={scrollY} />
 
-      {/* Content */}
       <div className="relative z-10">
-        
         <section className="min-h-screen flex flex-col items-center justify-center px-6 relative overflow-hidden" style={{
           perspective: '1200px',
         }}>
-          {/* Content */}
           <div className="max-w-4xl mx-auto text-center relative z-20" style={{
             transform: `translateY(${scrollY * 0.3}px) perspective(1000px) rotateX(${Math.sin(scrollY * 0.01) * 2}deg)`,
             transition: 'transform 0.05s ease-out',
             transformStyle: 'preserve-3d',
           }}>
-            
             <div className="mb-8 tracking-widest uppercase text-yellow-600 text-sm md:text-base font-mono">
               All-in-One University Platform
             </div>
 
-            
             <h1 className="text-6xl md:text-8xl font-black mb-4 tracking-tighter" style={{
               textShadow: '0 0 30px rgba(212, 175, 55, 0.3), 0 0 60px rgba(212, 175, 55, 0.1)',
               letterSpacing: '-0.02em',
@@ -45,22 +39,18 @@ export const HomePage: React.FC = () => {
               <span className="text-yellow-600">HUB</span>
             </h1>
 
-            
             <div className="text-xl md:text-2xl text-yellow-600 font-light tracking-widest uppercase mb-8 font-mono">
               Schedules. Classrooms. Resources. Files. Community.
             </div>
 
-            
             <div className="text-sm md:text-base text-white/60 font-mono uppercase tracking-widest mb-12">
               Unified Campus Management & Collaboration Platform
             </div>
 
-            
             <p className="text-white/70 max-w-2xl mx-auto mb-12 leading-relaxed text-base md:text-lg">
               A comprehensive platform bringing together class schedules, classroom management, study resources, personal file storage, and community collaboration. From real-time schedule updates and conflict-free bookings to shared study materials and secure personal storage—everything your college community needs in one place.
             </p>
 
-            
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-16 max-w-3xl mx-auto">
               {[
                 { label: 'For Students', value: 'Live Schedules & PYQs' },
