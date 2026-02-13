@@ -17,9 +17,8 @@ export const FileUpload: React.FC<FileUploadProps> = ({ userId, onUploadSuccess 
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Validate file size (100MB max)
     if (file.size > 100 * 1024 * 1024) {
-      setError('File size exceeds 100MB limit');
+      setError('File exceeds 100MB limit');
       return;
     }
 
@@ -28,26 +27,21 @@ export const FileUpload: React.FC<FileUploadProps> = ({ userId, onUploadSuccess 
     setProgress(0);
 
     try {
-      // Simulate progress
-      const progressInterval = setInterval(() => {
+      const interval = setInterval(() => {
         setProgress(prev => {
-          if (prev >= 90) clearInterval(progressInterval);
+          if (prev >= 90) clearInterval(interval);
           return Math.min(prev + 10, 90);
         });
       }, 100);
 
       await uploadFile(file, userId);
-
-      clearInterval(progressInterval);
+      clearInterval(interval);
       setProgress(100);
 
-      // Reset after success
       setTimeout(() => {
         setIsUploading(false);
         setProgress(0);
-        if (fileInputRef.current) {
-          fileInputRef.current.value = '';
-        }
+        if (fileInputRef.current) fileInputRef.current.value = '';
         onUploadSuccess();
       }, 500);
     } catch (err) {
@@ -61,10 +55,10 @@ export const FileUpload: React.FC<FileUploadProps> = ({ userId, onUploadSuccess 
     <div className="bg-gray-900 p-6 rounded-lg border border-blue-600/30">
       <div className="flex items-center gap-2 mb-4">
         <span className="text-blue-400 text-xl">🔒</span>
-        <h3 className="text-lg font-semibold text-white">Your Personal Storage</h3>
+        <h3 className="text-lg font-semibold text-white">Personal Storage</h3>
       </div>
       <div
-        className="border-2 border-dashed border-blue-600/50 rounded-lg p-8 text-center hover:border-blue-600 transition-colors cursor-pointer"
+        className="border-2 border-dashed border-blue-600/50 rounded-lg p-8 text-center hover:border-blue-600 cursor-pointer"
         onClick={() => fileInputRef.current?.click()}
       >
         <input
@@ -73,14 +67,13 @@ export const FileUpload: React.FC<FileUploadProps> = ({ userId, onUploadSuccess 
           onChange={handleFileSelect}
           disabled={isUploading}
           className="hidden"
-          accept="*"
         />
 
         <div className="flex flex-col items-center gap-3">
           <Upload className={`w-8 h-8 ${isUploading ? 'text-gray-500' : 'text-blue-600'}`} />
           <div>
-            <p className="text-white font-semibold">Click to upload or drag and drop</p>
-            <p className="text-sm text-gray-400">Maximum file size: 100MB (Private Storage)</p>
+            <p className="text-white font-semibold">Click to upload</p>
+            <p className="text-sm text-gray-400">Max 100MB (Private)</p>
           </div>
         </div>
 
@@ -88,11 +81,11 @@ export const FileUpload: React.FC<FileUploadProps> = ({ userId, onUploadSuccess 
           <div className="mt-4">
             <div className="w-full bg-gray-700 rounded-full h-2">
               <div
-                className="bg-yellow-600 h-2 rounded-full transition-all duration-300"
+                className="bg-yellow-600 h-2 rounded-full"
                 style={{ width: `${progress}%` }}
               />
             </div>
-            <p className="text-sm text-gray-400 mt-2">Uploading... {progress}%</p>
+            <p className="text-sm text-gray-400 mt-2">{progress}%</p>
           </div>
         )}
       </div>
