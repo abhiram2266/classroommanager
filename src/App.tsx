@@ -6,6 +6,7 @@ import { ClassroomsPage } from '@/pages/ClassroomsPage';
 import { ScheduleClassPage } from '@/pages/ScheduleClassPage';
 import { DrivePage } from '@/pages/DrivePage';
 import { StudyMaterialsPage } from '@/pages/StudyMaterialsPage';
+import { CommunityPage } from '@/pages/CommunityPage';
 import './App.css';
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
         <Route path="/schedule-class" element={<ScheduleClassPage />} />
         <Route path="/drive" element={<DrivePage />} />
         <Route path="/study-materials" element={<StudyMaterialsPage />} />
+        <Route path="/community" element={<CommunityPage />} />
       </Routes>
     </Router>
   );
