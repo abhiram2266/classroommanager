@@ -1,11 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { ThreeBackground } from '@/components/ThreeBackground';
 
 export const HomePage: React.FC = () => {
   const [scrollY, setScrollY] = useState(0);
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  
   useEffect(() => {
     const handleScroll = () => {
       setScrollY(window.scrollY);
@@ -14,96 +13,18 @@ export const HomePage: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    
-    const stars: Array<{ x: number; y: number; radius: number; opacity: number; twinkleSpeed: number }> = [];
-    for (let i = 0; i < 200; i++) {
-      stars.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        radius: Math.random() * 1.5,
-        opacity: Math.random() * 0.5 + 0.5,
-        twinkleSpeed: Math.random() * 0.03 + 0.005,
-      });
-    }
-
-    let animationFrame: number;
-    let time = 0;
-
-    const animate = () => {
-      time += 1;
-      ctx.fillStyle = 'rgba(10, 10, 10, 0.1)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      
-      stars.forEach((star) => {
-        const twinkle = Math.abs(Math.sin(time * star.twinkleSpeed)) * 0.5 + 0.5;
-        ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity * twinkle})`;
-        ctx.beginPath();
-        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-        ctx.fill();
-      });
-
-      animationFrame = requestAnimationFrame(animate);
-    };
-
-    animate();
-
-    const handleResize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      cancelAnimationFrame(animationFrame);
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden">
-      
-      <canvas
-        ref={canvasRef}
-        className="fixed top-0 left-0 w-full h-full pointer-events-none z-0"
-      />
+      {/* Three.js Background */}
+      <ThreeBackground scrollY={scrollY} />
 
-      
+      {/* Content */}
       <div className="relative z-10">
         
         <section className="min-h-screen flex flex-col items-center justify-center px-6 relative overflow-hidden" style={{
           perspective: '1200px',
         }}>
-          
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 md:w-[500px] md:h-[500px] pointer-events-none opacity-40" style={{
-            transform: `translateX(-50%) translateY(-50%) rotateX(${scrollY * 0.3}deg) rotateY(${scrollY * 0.5}deg) translateZ(0px)`,
-            transition: 'transform 0.05s ease-out',
-            transformStyle: 'preserve-3d',
-          }}>
-            <svg viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="250" cy="250" r="200" stroke="#d4af37" strokeWidth="2" />
-              <circle cx="250" cy="250" r="220" stroke="#d4af37" strokeWidth="1" opacity="0.5" />
-              <circle cx="250" cy="250" r="180" stroke="#d4af37" strokeWidth="1" opacity="0.3" />
-              
-              
-              <path d="M 250 50 Q 400 250 250 450" stroke="#d4af37" strokeWidth="2" opacity="0.4" />
-              <path d="M 50 250 Q 250 400 450 250" stroke="#d4af37" strokeWidth="2" opacity="0.4" />
-            </svg>
-          </div>
-
-          
+          {/* Content */}
           <div className="max-w-4xl mx-auto text-center relative z-20" style={{
             transform: `translateY(${scrollY * 0.3}px) perspective(1000px) rotateX(${Math.sin(scrollY * 0.01) * 2}deg)`,
             transition: 'transform 0.05s ease-out',
@@ -111,7 +32,7 @@ export const HomePage: React.FC = () => {
           }}>
             
             <div className="mb-8 tracking-widest uppercase text-yellow-600 text-sm md:text-base font-mono">
-              Centralized Web-Based Solution
+              All-in-One University Platform
             </div>
 
             
@@ -119,33 +40,33 @@ export const HomePage: React.FC = () => {
               textShadow: '0 0 30px rgba(212, 175, 55, 0.3), 0 0 60px rgba(212, 175, 55, 0.1)',
               letterSpacing: '-0.02em',
             }}>
-              CAMPUS
+              COLLEGE
               <br />
-              <span className="text-yellow-600">SCHEDULER</span>
+              <span className="text-yellow-600">HUB</span>
             </h1>
 
             
             <div className="text-xl md:text-2xl text-yellow-600 font-light tracking-widest uppercase mb-8 font-mono">
-              Real-time Updates. Zero Conflicts. Full Transparency.
+              Schedules. Classrooms. Resources. Files. Community.
             </div>
 
             
             <div className="text-sm md:text-base text-white/60 font-mono uppercase tracking-widest mb-12">
-              Smart Classroom & Event Management System
+              Unified Campus Management & Collaboration Platform
             </div>
 
             
             <p className="text-white/70 max-w-2xl mx-auto mb-12 leading-relaxed text-base md:text-lg">
-              A centralized platform that provides real-time schedule updates, integrates faculty availability, prevents scheduling conflicts, and ensures easy accessibility across devices. No more confusion from class cancellations, room changes, or faculty absence.
+              A comprehensive platform bringing together class schedules, classroom management, study resources, personal file storage, and community collaboration. From real-time schedule updates and conflict-free bookings to shared study materials and secure personal storage—everything your college community needs in one place.
             </p>
 
             
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-16 max-w-3xl mx-auto">
               {[
-                { label: 'For Students', value: 'Live Class Updates' },
-                { label: 'For Faculty', value: 'Availability Control' },
-                { label: 'For Admins', value: 'Conflict Prevention' },
-                { label: 'For All', value: 'Cross-Device Access' }
+                { label: 'For Students', value: 'Live Schedules & PYQs' },
+                { label: 'For Faculty', value: 'Availability Updates' },
+                { label: 'For Admins', value: 'Schedule Management' },
+                { label: 'For All', value: 'File Storage & Collab' }
               ].map((card, idx) => (
                 <div 
                   key={idx}
@@ -173,7 +94,7 @@ export const HomePage: React.FC = () => {
         </section>
 
         
-        <section className="py-32 px-6 border-t border-yellow-600/20 bg-gradient-to-b from-black to-gray-900">
+        <section className="py-32 px-6 border-t border-yellow-600/20">
           <div className="max-w-5xl mx-auto">
             <h2 className="text-5xl md:text-7xl font-black mb-12 text-center tracking-tighter" style={{
               textShadow: '0 0 20px rgba(212, 175, 55, 0.2)',
@@ -185,18 +106,18 @@ export const HomePage: React.FC = () => {
               {[
                 {
                   step: '01',
-                  title: 'Schedule Creation',
-                  description: 'Administrators create and manage class schedules, assign rooms, and set faculty for each session.'
+                  title: 'Browse Schedules',
+                  description: 'View all your classes and college events in real-time with instant updates.'
                 },
                 {
                   step: '02',
-                  title: 'Real-Time Updates',
-                  description: 'Any changes to schedules are instantly synced across the platform and visible to all users.'
+                  title: 'Explore Classrooms',
+                  description: 'Check classroom details, capacity, available facilities, and real-time status.'
                 },
                 {
                   step: '03',
-                  title: 'Conflict Detection',
-                  description: 'The system automatically detects and prevents double bookings and scheduling overlaps.'
+                  title: 'Access Study Materials',
+                  description: 'Download PYQs, notes, books, lab manuals shared by your college community.'
                 },
               ].map((item, idx) => (
                 <div 
@@ -216,18 +137,18 @@ export const HomePage: React.FC = () => {
               {[
                 {
                   step: '04',
-                  title: 'Faculty Updates',
-                  description: 'Faculty members can update their availability status, triggering automatic schedule adjustments.'
+                  title: 'Store Privately',
+                  description: 'Upload and manage your personal files in secure private storage accessible only to you.'
                 },
                 {
                   step: '05',
-                  title: 'Student Access',
-                  description: 'Students view their personalized schedules with real-time notifications for any changes.'
+                  title: 'Contribute & Share',
+                  description: 'Share your study materials with the entire college community through the Study Materials section.'
                 },
                 {
                   step: '06',
-                  title: 'Analytics & Reports',
-                  description: 'Track classroom utilization, view attendance patterns, and generate scheduling reports.'
+                  title: 'Stay Connected',
+                  description: 'Access everything from any device with our fully responsive design and cross-platform support.'
                 },
               ].map((item, idx) => (
                 <div 
@@ -257,28 +178,28 @@ export const HomePage: React.FC = () => {
             <div className="space-y-8">
               {[
                 {
-                  title: 'Real-Time Schedule Updates',
-                  description: 'Class cancellations, room changes, and schedule modifications are reflected instantly across all devices.'
+                  title: 'Unified Schedule Viewing',
+                  description: 'Access all your class schedules in one place with real-time updates and instant notifications.'
                 },
                 {
-                  title: 'Faculty Availability Integration',
-                  description: 'Faculty members can mark themselves unavailable due to leave, meetings, or emergencies with immediate visibility.'
+                  title: 'Classroom Information Hub',
+                  description: 'Browse detailed classroom information including capacity, location, amenities, and current status.'
                 },
                 {
-                  title: 'Automatic Conflict Prevention',
-                  description: 'The system detects and prevents double bookings, overlapping events, and resource conflicts before they occur.'
+                  title: 'Shared Study Materials',
+                  description: 'Discover and download PYQs, class notes, reference books, and lab manuals shared by your community.'
                 },
                 {
-                  title: 'Classroom Utilization Tracking',
-                  description: 'Monitor which rooms are occupied, available, or under maintenance with real-time status indicators.'
+                  title: 'Personal Cloud Storage',
+                  description: 'Secure private file storage for your personal assignments, notes, and projects - only you can access.'
                 },
                 {
-                  title: 'Role-Based Access Control',
-                  description: 'Students view schedules, faculty update availability, and admins manage everything - each with appropriate permissions.'
+                  title: 'Community Collaboration',
+                  description: 'Contribute your study materials to help other students and build a strong learning community.'
                 },
                 {
-                  title: 'Cross-Device Accessibility',
-                  description: 'Access the platform from any device - desktop, tablet, or mobile - with a fully responsive interface.'
+                  title: 'Cross-Device Access',
+                  description: 'Access your schedules, files, and study materials from desktop, tablet, or mobile seamlessly.'
                 },
               ].map((feature, idx) => (
                 <div 
@@ -304,12 +225,12 @@ export const HomePage: React.FC = () => {
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[
-                { title: 'Students', description: 'No more wasted time attending wrong classrooms or missing schedule updates' },
-                { title: 'Faculty', description: 'Easy availability updates and reduced manual coordination overhead' },
-                { title: 'Administrators', description: 'Streamlined scheduling with automatic conflict detection and resolution' },
-                { title: 'Event Organizers', description: 'Simple room booking and event scheduling without conflicts' },
-                { title: 'IT Staff', description: 'Modern tech stack with Firebase for easy maintenance and scalability' },
-                { title: 'Institution', description: 'Efficient campus infrastructure utilization and improved transparency' },
+                { title: 'Students', description: 'Never miss a class! Access schedules and study materials all in one place.' },
+                { title: 'Faculty', description: 'Easily check classrooms and manage your availability across the platform.' },
+                { title: 'Administrators', description: 'Centralized control of schedules, classrooms, and all platform resources.' },
+                { title: 'Researchers', description: 'Share academic materials and contribute to the college knowledge base.' },
+                { title: 'Tutors', description: 'Upload notes and resources to help students prepare for exams.' },
+                { title: 'Institution', description: 'Improve classroom utilization and foster a collaborative learning environment.' },
               ].map((item, idx) => (
                 <div 
                   key={idx} 

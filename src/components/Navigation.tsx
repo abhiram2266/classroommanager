@@ -51,6 +51,20 @@ export const Navigation: React.FC = () => {
             Schedule Class
           </Link>
           <Link
+            to="/drive"
+            className={`uppercase text-xs tracking-wider transition-colors ${isActive('/drive') ? 'text-yellow-600' : 'text-gray-400 hover:text-yellow-600'}`}
+            style={{ fontFamily: "'Audiowide', sans-serif", letterSpacing: '0.08em' }}
+          >
+            Drive
+          </Link>
+          <Link
+            to="/study-materials"
+            className={`uppercase text-xs tracking-wider transition-colors ${isActive('/study-materials') ? 'text-yellow-600' : 'text-gray-400 hover:text-yellow-600'}`}
+            style={{ fontFamily: "'Audiowide', sans-serif", letterSpacing: '0.08em' }}
+          >
+            Study Materials
+          </Link>
+          <Link
             to="/schedule"
             className={`uppercase text-xs tracking-wider transition-colors ${isActive('/schedule') ? 'text-yellow-600' : 'text-gray-400 hover:text-yellow-600'}`}
             style={{ fontFamily: "'Audiowide', sans-serif", letterSpacing: '0.08em' }}
@@ -113,6 +127,22 @@ export const Navigation: React.FC = () => {
               style={{ letterSpacing: '0.08em' }}
             >
               Schedule Class
+            </Link>
+            <Link
+              to="/drive"
+              className={`block uppercase text-xs tracking-wider transition-colors ${isActive('/drive') ? 'text-yellow-600' : 'text-gray-400 hover:text-yellow-600'}`}
+              onClick={() => setIsOpen(false)}
+              style={{ letterSpacing: '0.08em' }}
+            >
+              Drive
+            </Link>
+            <Link
+              to="/study-materials"
+              className={`block uppercase text-xs tracking-wider transition-colors ${isActive('/study-materials') ? 'text-yellow-600' : 'text-gray-400 hover:text-yellow-600'}`}
+              onClick={() => setIsOpen(false)}
+              style={{ letterSpacing: '0.08em' }}
+            >
+              Study Materials
             </Link>
             <Link
               to="/schedule"
