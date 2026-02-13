@@ -13,16 +13,14 @@ export const FileList: React.FC<FileListProps> = ({ files, isLoading, onFileDele
   const [error, setError] = useState<string | null>(null);
 
   const handleDelete = async (filePath: string) => {
-    if (!window.confirm('Are you sure you want to delete this file?')) return;
-
+    if (!window.confirm('Delete this file?')) return;
     setDeletingPath(filePath);
     setError(null);
-
     try {
       await deleteFile(filePath);
       onFileDeleted();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to delete file');
+      setError(err instanceof Error ? err.message : 'Failed to delete');
     } finally {
       setDeletingPath(null);
     }
@@ -47,12 +45,10 @@ export const FileList: React.FC<FileListProps> = ({ files, isLoading, onFileDele
   }
 
   if (files.length === 0) {
-    return (
-      <div className="text-center py-8">
-        <p className="text-gray-400">No files uploaded yet</p>
-      </div>
-    );
+    return <p className="text-gray-400">No files yet</p>;
   }
+
+  const totalSize = files.reduce((sum, f) => sum + f.size, 0);
 
   return (
     <div className="space-y-3">
@@ -68,7 +64,7 @@ export const FileList: React.FC<FileListProps> = ({ files, isLoading, onFileDele
           <table className="w-full">
             <thead>
               <tr className="border-b border-yellow-600/20 bg-gray-800/50">
-                <th className="px-4 py-3 text-left text-sm font-semibold text-yellow-600">File Name</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold text-yellow-600">Name</th>
                 <th className="px-4 py-3 text-left text-sm font-semibold text-yellow-600">Size</th>
                 <th className="px-4 py-3 text-left text-sm font-semibold text-yellow-600">Uploaded</th>
                 <th className="px-4 py-3 text-right text-sm font-semibold text-yellow-600">Actions</th>
@@ -76,7 +72,7 @@ export const FileList: React.FC<FileListProps> = ({ files, isLoading, onFileDele
             </thead>
             <tbody>
               {files.map((file) => (
-                <tr key={file.path} className="border-b border-yellow-600/10 hover:bg-gray-800/30 transition-colors">
+                <tr key={file.path} className="border-b border-yellow-600/10 hover:bg-gray-800/30">
                   <td className="px-4 py-3">
                     <p className="text-white truncate max-w-xs" title={file.name}>
                       {file.name}
@@ -87,23 +83,21 @@ export const FileList: React.FC<FileListProps> = ({ files, isLoading, onFileDele
                   </td>
                   <td className="px-4 py-3">
                     <p className="text-sm text-gray-400">
-                      {new Date(file.uploadedAt).toLocaleDateString()} {new Date(file.uploadedAt).toLocaleTimeString()}
+                      {new Date(file.uploadedAt).toLocaleDateString()}
                     </p>
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-end gap-2">
                       <button
                         onClick={() => handleDownload(file.downloadUrl, file.name)}
-                        className="p-2 text-yellow-600 hover:bg-yellow-600/20 rounded transition-colors"
-                        title="Download file"
+                        className="p-2 text-yellow-600 hover:bg-yellow-600/20 rounded"
                       >
                         <Download className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => handleDelete(file.path)}
                         disabled={deletingPath === file.path}
-                        className="p-2 text-red-400 hover:bg-red-600/20 rounded transition-colors disabled:opacity-50"
-                        title="Delete file"
+                        className="p-2 text-red-400 hover:bg-red-600/20 rounded disabled:opacity-50"
                       >
                         {deletingPath === file.path ? (
                           <Loader className="w-4 h-4 animate-spin" />
@@ -121,7 +115,7 @@ export const FileList: React.FC<FileListProps> = ({ files, isLoading, onFileDele
       </div>
 
       <p className="text-xs text-gray-500 text-right">
-        Total files: {files.length} | Total size: {formatFileSize(files.reduce((sum, f) => sum + f.size, 0))}
+        {files.length} files | {formatFileSize(totalSize)}
       </p>
     </div>
   );

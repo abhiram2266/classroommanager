@@ -19,16 +19,14 @@ export const StudyMaterialList: React.FC<StudyMaterialListProps> = ({
   const [error, setError] = useState<string | null>(null);
 
   const handleDelete = async (id: string, storagePath: string) => {
-    if (!window.confirm('Are you sure you want to delete this material?')) return;
-
+    if (!window.confirm('Delete this material?')) return;
     setDeletingId(id);
     setError(null);
-
     try {
       await deleteStudyMaterial(id, storagePath);
       onMaterialDeleted();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to delete material');
+      setError(err instanceof Error ? err.message : 'Failed to delete');
     } finally {
       setDeletingId(null);
     }
@@ -53,12 +51,7 @@ export const StudyMaterialList: React.FC<StudyMaterialListProps> = ({
   }
 
   if (materials.length === 0) {
-    return (
-      <div className="text-center py-8">
-        <p className="text-gray-400">No study materials available yet</p>
-        {selectedCategory && <p className="text-sm text-gray-500 mt-2">Try selecting a different category</p>}
-      </div>
-    );
+    return <p className="text-gray-400">No materials yet</p>;
   }
 
   return (
@@ -74,7 +67,7 @@ export const StudyMaterialList: React.FC<StudyMaterialListProps> = ({
         {materials.map((material) => (
           <div
             key={material.id}
-            className="bg-gray-900 p-4 rounded-lg border border-yellow-600/30 hover:border-yellow-600/60 transition-colors"
+            className="bg-gray-900 p-4 rounded-lg border border-yellow-600/30 hover:border-yellow-600/60"
           >
             <div className="flex items-start justify-between mb-2">
               <div className="flex items-start gap-2 flex-1">
@@ -84,8 +77,8 @@ export const StudyMaterialList: React.FC<StudyMaterialListProps> = ({
                     <p className="text-white font-semibold truncate" title={material.name}>
                       {material.name}
                     </p>
-                    <span className="inline-block px-1.5 py-0.5 bg-green-600/20 border border-green-600/40 rounded text-xs text-green-400 whitespace-nowrap">
-                      🌍 Shared
+                    <span className="inline-block px-1.5 py-0.5 bg-green-600/20 border border-green-600/40 rounded text-xs text-green-400">
+                      Shared
                     </span>
                   </div>
                   <span className="inline-block px-2 py-1 bg-yellow-600/20 border border-yellow-600/40 rounded text-xs text-yellow-400 mt-1">
@@ -96,33 +89,21 @@ export const StudyMaterialList: React.FC<StudyMaterialListProps> = ({
             </div>
 
             <div className="space-y-2 text-sm text-gray-400 mb-4">
-              <p>
-                <span className="text-gray-500">Uploaded by:</span> <span className="text-yellow-400">{material.uploadedBy}</span>
-              </p>
-              <p>
-                <span className="text-gray-500">Subject:</span> {material.subject}
-              </p>
-              <p>
-                <span className="text-gray-500">Semester:</span> {material.semester}
-              </p>
-              <p>
-                <span className="text-gray-500">Size:</span> {formatFileSize(material.size)}
-              </p>
-              {material.description && (
-                <p>
-                  <span className="text-gray-500">Description:</span> {material.description}
-                </p>
-              )}
+              <p><span className="text-gray-500">By:</span> <span className="text-yellow-400">{material.uploadedBy}</span></p>
+              <p><span className="text-gray-500">Subject:</span> {material.subject}</p>
+              <p><span className="text-gray-500">Sem:</span> {material.semester}</p>
+              <p><span className="text-gray-500">Size:</span> {formatFileSize(material.size)}</p>
+              {material.description && <p><span className="text-gray-500">Desc:</span> {material.description}</p>}
               <p className="flex items-center gap-1">
                 <Eye className="w-3 h-3" />
-                {material.downloads} downloads
+                {material.downloads}
               </p>
             </div>
 
             <div className="flex items-center gap-2 pt-3 border-t border-yellow-600/20">
               <button
                 onClick={() => handleDownload(material.downloadUrl, material.fileName)}
-                className="flex-1 py-2 bg-yellow-600/20 hover:bg-yellow-600/40 border border-yellow-600/50 text-yellow-600 rounded transition-colors text-sm font-semibold flex items-center justify-center gap-2"
+                className="flex-1 py-2 bg-yellow-600/20 hover:bg-yellow-600/40 border border-yellow-600/50 text-yellow-600 rounded text-sm font-semibold flex items-center justify-center gap-2"
               >
                 <Download className="w-4 h-4" />
                 Download
@@ -130,8 +111,7 @@ export const StudyMaterialList: React.FC<StudyMaterialListProps> = ({
               <button
                 onClick={() => handleDelete(material.id, material.storagePath)}
                 disabled={deletingId === material.id}
-                className="p-2 text-red-400 hover:bg-red-600/20 rounded transition-colors disabled:opacity-50"
-                title="Delete material"
+                className="p-2 text-red-400 hover:bg-red-600/20 rounded disabled:opacity-50"
               >
                 {deletingId === material.id ? (
                   <Loader className="w-4 h-4 animate-spin" />
@@ -145,8 +125,10 @@ export const StudyMaterialList: React.FC<StudyMaterialListProps> = ({
       </div>
 
       <p className="text-xs text-gray-500 text-center mt-4">
-        Total materials: {materials.length}
+        {materials.length} materials
       </p>
     </div>
+  );
+};
   );
 };

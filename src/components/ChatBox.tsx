@@ -4,17 +4,10 @@ import { ChatMessage, sendChatMessage, deleteChatMessage } from '@/services/comm
 
 interface ChatBoxProps {
   messages: ChatMessage[];
-  isLoading: boolean;
-  onMessageSent: () => void;
-  onMessageDeleted: () => void;
+  onSend: () => void;
 }
 
-export const ChatBox: React.FC<ChatBoxProps> = ({
-  messages,
-  isLoading,
-  onMessageSent,
-  onMessageDeleted,
-}) => {
+export const ChatBox: React.FC<ChatBoxProps> = ({ messages, onSend }) => {
   const [newMessage, setNewMessage] = useState('');
   const [senderName, setSenderName] = useState('Anonymous');
   const [isSending, setIsSending] = useState(false);
@@ -22,19 +15,16 @@ export const ChatBox: React.FC<ChatBoxProps> = ({
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-
     if (!newMessage.trim()) {
       setError('Message cannot be empty');
       return;
     }
-
     if (!senderName.trim()) {
       setError('Please enter your name');
       return;
@@ -42,13 +32,12 @@ export const ChatBox: React.FC<ChatBoxProps> = ({
 
     setError(null);
     setIsSending(true);
-
     try {
       await sendChatMessage(senderName, newMessage);
       setNewMessage('');
-      onMessageSent();
+      onSend();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to send message');
+      setError(err instanceof Error ? err.message : 'Failed to send');
     } finally {
       setIsSending(false);
     }
@@ -56,14 +45,12 @@ export const ChatBox: React.FC<ChatBoxProps> = ({
 
   const handleDeleteMessage = async (id: string) => {
     if (!window.confirm('Delete this message?')) return;
-
     setDeletingId(id);
-
     try {
       await deleteChatMessage(id);
-      onMessageDeleted();
+      onSend();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to delete message');
+      setError(err instanceof Error ? err.message : 'Failed to delete');
     } finally {
       setDeletingId(null);
     }
@@ -71,13 +58,8 @@ export const ChatBox: React.FC<ChatBoxProps> = ({
 
   return (
     <div className="flex flex-col h-screen bg-black rounded-lg border border-yellow-600/30 overflow-hidden">
-      {/* Messages Container */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {isLoading ? (
-          <div className="flex items-center justify-center h-full">
-            <Loader className="w-6 h-6 text-yellow-600 animate-spin" />
-          </div>
-        ) : messages.length === 0 ? (
+        {messages.length === 0 ? (
           <div className="flex items-center justify-center h-full text-gray-400">
             <p>No messages yet. Start the conversation!</p>
           </div>
@@ -94,7 +76,7 @@ export const ChatBox: React.FC<ChatBoxProps> = ({
                     <button
                       onClick={() => handleDeleteMessage(msg.id)}
                       disabled={deletingId === msg.id}
-                      className="opacity-0 group-hover:opacity-100 p-1 text-red-400 hover:bg-red-600/20 rounded text-xs transition-all disabled:opacity-50"
+                      className="opacity-0 group-hover:opacity-100 p-1 text-red-400 hover:bg-red-600/20 rounded text-xs disabled:opacity-50"
                     >
                       ✕
                     </button>
@@ -108,7 +90,6 @@ export const ChatBox: React.FC<ChatBoxProps> = ({
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Error Display */}
       {error && (
         <div className="px-4 py-2 bg-red-900/30 border-t border-red-600/50 flex items-center gap-2">
           <AlertCircle className="w-4 h-4 text-red-400" />
@@ -116,7 +97,6 @@ export const ChatBox: React.FC<ChatBoxProps> = ({
         </div>
       )}
 
-      {/* Input Area */}
       <form onSubmit={handleSendMessage} className="p-4 border-t border-yellow-600/30 bg-gray-900/50">
         <div className="flex gap-2 mb-3">
           <input
@@ -140,7 +120,7 @@ export const ChatBox: React.FC<ChatBoxProps> = ({
           <button
             type="submit"
             disabled={isSending}
-            className="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-black font-semibold rounded transition-colors disabled:opacity-50 flex items-center gap-2"
+            className="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-black font-semibold rounded disabled:opacity-50 flex items-center gap-2"
           >
             {isSending ? (
               <Loader className="w-4 h-4 animate-spin" />

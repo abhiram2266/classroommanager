@@ -4,49 +4,29 @@ import { Event, deleteEvent } from '@/services/community';
 
 interface EventListProps {
   events: Event[];
-  isLoading: boolean;
-  onEventDeleted: () => void;
+  onDelete: () => void;
 }
 
-export const EventList: React.FC<EventListProps> = ({
-  events,
-  isLoading,
-  onEventDeleted,
-}) => {
+export const EventList: React.FC<EventListProps> = ({ events, onDelete }) => {
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const handleDelete = async (id: string) => {
     if (!window.confirm('Delete this event?')) return;
-
     setDeletingId(id);
     setError(null);
-
     try {
       await deleteEvent(id);
-      onEventDeleted();
+      onDelete();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to delete event');
+      setError(err instanceof Error ? err.message : 'Failed to delete');
     } finally {
       setDeletingId(null);
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center py-8">
-        <Loader className="w-6 h-6 text-yellow-600 animate-spin" />
-        <p className="ml-3 text-gray-400">Loading events...</p>
-      </div>
-    );
-  }
-
   if (events.length === 0) {
-    return (
-      <div className="text-center py-8">
-        <p className="text-gray-400">No upcoming events</p>
-      </div>
-    );
+    return <p className="text-gray-400">No upcoming events</p>;
   }
 
   return (
@@ -57,15 +37,14 @@ export const EventList: React.FC<EventListProps> = ({
           <p className="text-sm text-red-400">{error}</p>
         </div>
       )}
-
       {events.map((event) => (
         <div
           key={event.id}
-          className="p-4 rounded-lg border border-yellow-600/30 bg-black/50 hover:border-yellow-600 transition-colors group"
+          className="p-4 rounded-lg border border-yellow-600/30 bg-black/50 hover:border-yellow-600 group"
         >
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1">
-              <h3 className="text-lg font-semibold text-white mb-3 group-hover:text-yellow-600 transition-colors">
+              <h3 className="text-lg font-semibold text-white mb-3 group-hover:text-yellow-600">
                 {event.title}
               </h3>
               <p className="text-gray-300 text-sm mb-4">{event.description}</p>
@@ -84,15 +63,14 @@ export const EventList: React.FC<EventListProps> = ({
                 </div>
               </div>
               <div className="flex items-center gap-4 text-xs text-gray-500 mt-3">
-                <span>Posted by: {event.createdBy}</span>
+                <span>By: {event.createdBy}</span>
                 <span>{new Date(event.createdAt).toLocaleDateString()}</span>
               </div>
             </div>
             <button
               onClick={() => handleDelete(event.id)}
               disabled={deletingId === event.id}
-              className="p-2 text-red-400 hover:bg-red-600/20 rounded transition-colors disabled:opacity-50 flex-shrink-0"
-              title="Delete event"
+              className="p-2 text-red-400 hover:bg-red-600/20 rounded disabled:opacity-50 flex-shrink-0"
             >
               {deletingId === event.id ? (
                 <Loader className="w-4 h-4 animate-spin" />
